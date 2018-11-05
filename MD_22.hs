@@ -15,6 +15,11 @@ b x = x `mod` 7
 c :: Integer -> Integer
 c x = x + 100
 
+ff_a :: TTT Integer
 ff_a = mm a (Node [44, -23] (Leaf [5, -14, 12, 13, 5]) (Node [33, 16] (Leaf [3, 2]) (Leaf [6]) (Leaf [7])) (Node [33, 16] (Leaf [3, 2]) (Leaf [-6]) (Leaf [7])))
+
+ff_b :: TTT Integer
 ff_b = mm b (Node [44, -23] (Leaf [5, -14, 12, 13, 5]) (Node [33, 16] (Leaf [3, 2]) (Leaf [6]) (Leaf [7])) (Node [33, 16] (Leaf [3, 2]) (Leaf [-6]) (Leaf [7])))
+
+ff_c :: TTT Integer
 ff_c = mm c (Node [44, -23] (Leaf [5, -14, 12, 13, 5]) (Node [33, 16] (Leaf [3, 2]) (Leaf [6]) (Leaf [7])) (Node [33, 16] (Leaf [3, 2]) (Leaf [-6]) (Leaf [7])))
