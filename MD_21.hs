@@ -1,59 +1,43 @@
 import Control.Monad
 import Data.List as M
-import Data.Maybe
+import Data.Maybe (maybeToList)
 import Data.Map.Strict
 
+-- No saraksta tiek izņemti duplikāti
 rmdups :: (Eq a) => [a] -> [a]
 rmdups l = rmdups' l []             
   where rmdups' [] _ = []
         rmdups' (x:xs) ls | x `elem` ls = rmdups' xs ls | otherwise = x : rmdups' xs (x:ls)
 
+-- Funkcija aa, kas prasīta 1. mājas darba A. piemērā
 aa xs ys = do
     let zs = rmdups xs
-    forM_ zs $ \ss -> do
-      case M.lookup ss ys of
-        Just n -> print n
-        Nothing -> return ()
+    let result = funct zs ys
+    concat result
 
-aa1 = aa ["aaa","a","adsafa","v","dfdadfa","dddd", "c", "aaa","a","adsafa"] [("a", "aa"), ("bb", "bbb"), ("c", "def")]
+funct xs ys = M.map replace xs
+    where replace x = maybeToList (M.lookup x ys)
 
--- cc_list :: [a] -> Maybe a
--- cc_list [] = Nothing
--- cc_list (x:xs) = x
+-- Testpiemēri funkcijas aa testēšanai
+aa1 = aa ["aaa","a","adsafa","v","dfdadfa","dddd", "c", "aaa","a","adsafa"] [("f", "15"),("v", "iii"),("a", "aa"), ("bb", "bbb"), ("c", "def")]
+aa2 = aa ["c","a","bb","v","f","deadbeef", "c", "aaa","a","mmm"] [("f", "22"),("v", "iii"),("a", "dead"), ("mmm", "bbb"), ("c", "beef")]
 
--- type cc_list = [(Char, Char)]
-
--- append1 :: (a,a) -> [a] -> [a]
--- append1 x xs = M.map (\xss -> xss ++ [x]) xs
-
--- merge1 :: (Eq a) => [(a, a)] -> [(a, a)] -> [(a, a)]
--- merge1 [] _ = []
--- merge1 _ [] = []
--- merge1 (x:xs) (y:ys)
---     | snd x == fst y = (fst x, snd y) : merge1 xs ys
---     | otherwise = merge1 xs ys
-
+-- Funkcija merge1, kas atrod korteža otrā elementa sakritības ar kortežu 
+-- saraksta katra korteža pirmo elementu un atgriež attiecīgo sarakstu ar
+-- atrastajiem, modificētajiem kortežiem
 merge1 :: (Eq a) => (a, a) -> [(a, a)] -> [(a, a)]
--- merge1 [] _ = []
 merge1 _ [] = []
 merge1 x (y:ys)
     | snd x == fst y = (fst x, snd y) : merge1 x ys
     | otherwise = merge1 x ys
 
-merge :: [a] -> [a] -> [a]
-merge xs     []     = xs
-merge []     ys     = ys
-merge (x:xs) (y:ys) = x : y : merge xs ys
-
+-- Funkcija cc, kas prasīta mājas 1. uzdevuma B piemērā
 cc xs ys = do
   let curr_xs = rmdups xs
   let curr_ys = rmdups ys
-  let result = []
   forM_ curr_xs $ \ss -> do
-    let x = merge1 ss curr_ys
-    print(merge result x)
-  -- print result
-    -- result ++ merge1 xx curr_ys
+    print (merge1 ss curr_ys)
 
-cc1 = cc [("a","b"), ("e", "b")] [("b","c"), ("b", "d")] 
-cc2 = cc [("hello", "hi"), ("foo", "baz"), ("this", "that")] [("foo", "bar"), ("hello", "world"), ("goo", "boo")]
+-- Testpiemēri funkcijas cc testēšanai
+cc1 = cc [("a","b"), ("e", "b"), ("a","b"), ("e", "b"), ("a","b"), ("e", "b")] [("b","c"), ("b", "d"), ("b","c"), ("b", "d"), ("b","c"), ("b", "d")] 
+cc2 = cc [("hello", "hi"), ("foo", "baz"), ("this", "that"), ("boom", "bounty"), ("building", "country")] [("foo", "bar"), ("hi", "world"), ("goo", "boo"), ("bounty", "tequila"), ("country", "floors")]
